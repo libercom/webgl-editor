@@ -5,8 +5,9 @@ let controlPanel;
 window.onload = init;
 
 let objs = new ObjectsContainer();
+let lights = new LightContainer();
 
-objs.addObject(new Cube(shuffle(WebGL_MULTICOLOUR)), 'Cube 1');
+objs.addObject(new Sphere(WebGL_RED), 'Sphere 1');
 // objs.addObject(new Cube(shuffle(WebGL_MULTICOLOUR)), 'Cube 2');
 // objs.addObject(new Pyramid(shuffle(WebGL_MULTICOLOUR)), 'Pyramid');
 // objs.addObject(new Cone(pick2RandomColor(WebGL_MULTICOLOUR)), 'Cone');
@@ -22,10 +23,16 @@ function init() {
     gl.clearColor(1.0, 1.0, 1.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
 
-    Shader.init('vertex-shader', 'fragment-shader');
+    lights.addLightSource("Light Source 1");
+    lights.addOption();
+    lights.addLightSource("Light Source 2");
+    lights.addOption();
+    lights.addLightSource("Light Source 3");
 
-    objs.init();
+    Shader.init('vertex-shader', 'fragment-shader');
     Camera.init();
+    lights.init();
+    objs.init();
 
     render();
 };
@@ -35,7 +42,7 @@ function render() {
 
     Camera.resolve();
 
-    objs.drawObjects();
+    objs.drawObjects(lights.container);
 
     requestAnimFrame(render);
 }

@@ -14,3 +14,9 @@ function pick2RandomColor(array) {
 
     return result;
 }
+
+function pickOneRandomColor(...arr) {
+    let result = shuffle(arr).pop();
+
+    return result;
+}

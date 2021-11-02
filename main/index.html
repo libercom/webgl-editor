@@ -9,9 +9,12 @@
 	<script id="vertex-shader" type="x-shader/x-vertex">
 			attribute vec4 vPosition;
 			attribute vec4 vColor;
+			attribute vec4 vNormal;
 			uniform vec3 theta;
 			uniform vec3 tm;
 			uniform vec3 sm;
+			uniform vec4 lights[10];
+			uniform int numOfLights;
 
 			uniform mat4 modelViewMatrix;
 			uniform mat4 projectionMatrix;
@@ -54,7 +57,29 @@
 					tm.x,  tm.y,  tm.z,  1.0 
 				);
 
-				fColor = vColor;
+				vec4 diffuseProduct = vec4(1.0, 1.0, 1.0, 1.0);
+				vec4 specularProduct = vec4(1.0, 1.0, 1.0, 1.0);
+				vec4 ambientProduct = vec4(0.0, 0.0, 0.0, 1.0);
+				float shininess = 0.8;
+
+				vec3 vertexPos = vPosition.xyz;
+				vec4 result;
+
+				for (int i = 0; i < 3; i++) {
+					vec3 lightPos = lights[i].xyz;
+					vec3 lightVector = normalize(lightPos - vertexPos);
+	
+					vec3 normalVector = normalize((translation * rz * ry * rx * scale * vNormal).xyz);
+	
+					float distance = length(lightPos - vertexPos);
+					float diffuseValue = max(dot(lightVector, normalVector), 0.0) / distance; 
+					float specularValue = pow(diffuseValue, shininess);
+
+					result += vColor * (diffuseProduct * diffuseValue + specularProduct * specularValue + ambientProduct);
+				}
+
+				fColor = result;
+
 				gl_Position = projectionMatrix * modelViewMatrix * translation * rz * ry * rx * scale * vPosition;
 			}
 	</script>
@@ -76,10 +101,12 @@
 	<script type="text/javascript" src="./utils/Camera.js"></script>
 	<script type="text/javascript" src="./utils/Entity.js"></script>
 	<script type="text/javascript" src="./utils/Shader.js"></script>
-	<script type="text/javascript" src="./utils/Container.js"></script>
+	<script type="text/javascript" src="./utils/ObjectContainer.js"></script>
+	<script type="text/javascript" src="./utils/LightContainer.js"></script>
 	<script type="text/javascript" src="./utils/objects/Cone.js"></script>
 	<script type="text/javascript" src="./utils/objects/Cube.js"></script>
 	<script type="text/javascript" src="./utils/objects/Pyramid.js"></script>
+	<script type="text/javascript" src="./utils/objects/Sphere.js"></script>
 	<script type="text/javascript" src="index.js"></script>
 </head>
 
@@ -169,15 +196,13 @@
 				</div>
 				<div class="light-control-panel">
 					<label for="light">Light settings:</label>
-					<form onsubmit="submitHandler(event)">
-						<select class="light-control-panel-list">
+					<div>
+						<select class="light-control-panel-list" id="select-light">
 							<option selected="selected">Choose something</option>
-							<option value="light 1">Light Source 1</option>
-							<option value="light 2">Light Source 2</option>
-							<option value="light 3">Light Source 2</option>
+
 						</select>
-						<button type="button" class="light-control-panel-add">Add</button>
-					</form>
+						<button class="light-control-panel-add" id="add-light">Add</button>
+					</div>
 					<div class="light-control-panel-item">
 						<span class="light-control-panel-item-key">
 							TranslateX
@@ -231,6 +256,7 @@
 							<option value="Cube">Cube</option>
 							<option value="Pyramid">Pyramid</option>
 							<option value="Cone">Cone</option>
+							<option value="Sphere">Sphere</option>
 						</select>
 						<button class="object-control-panel-head-add" id="add-object">Add</button>
 					</div>
@@ -332,16 +358,8 @@
 	</div>
 
 	<script type="text/javascript">
-		function objectChangeHandler(id, value) {
-			document.getElementById(`object-slider-value${id}`).innerHTML = value;
-		}
-
 		function lightChangeHandler(id, value) {
 			document.getElementById(`light-slider-value${id}`).innerHTML = value;
-		}
-
-		function submitHandler(event) {
-			event.preventDefault();
 		}
 	</script>
 </body>

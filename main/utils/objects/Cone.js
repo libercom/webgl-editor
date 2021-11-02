@@ -1,6 +1,6 @@
 class Cone extends Entity {
     constructor(color) {
-        super([], []);
+        super([], [], []);
 
         this.color = color;
         this.bot = vec3(0.0, -0.5, 0.0);
