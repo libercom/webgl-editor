@@ -1,0 +1,357 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+label {
+  font-size: 18px;
+}
+
+.app {
+  width: 100%;
+}
+
+.app .app-monitor {
+  margin: 0 auto;
+  margin-top: 20px;
+  width: 90%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.app .app-monitor .control-panel {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 22%;
+}
+
+.app .app-monitor .control-panel .camera-control-panel .camera-control-item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 20px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 10px;
+}
+
+.app .app-monitor .control-panel .camera-control-panel .camera-control-item .camera-control-item-key {
+  margin-right: 5px;
+}
+
+.app .app-monitor .control-panel .camera-control-panel .camera-control-item .camera-control-item-slider {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+.app .app-monitor .control-panel .camera-control-panel .camera-control-item .camera-control-item-slider input {
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  -webkit-appearance: none;
+  width: 150px;
+  height: 10px;
+  border-radius: 5px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  -webkit-transition: opacity .2s;
+  transition: opacity .2s;
+}
+
+.app .app-monitor .control-panel .camera-control-panel .camera-control-item .camera-control-item-slider input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #0059ff;
+  cursor: pointer;
+}
+
+.app .app-monitor .control-panel .camera-control-panel .camera-control-item .camera-control-item-slider input::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #04AA6D;
+  cursor: pointer;
+}
+
+.app .app-monitor .control-panel .camera-control-panel .camera-control-item .camera-control-item-value {
+  margin-left: 5px;
+  width: 40px;
+}
+
+.app .app-monitor .control-panel .light-control-panel {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin-top: 40px;
+}
+
+.app .app-monitor .control-panel .light-control-panel .light-control-panel-list {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  outline: none;
+  padding: 1px;
+  border-radius: 13px;
+  height: 30px;
+  width: 170px;
+}
+
+.app .app-monitor .control-panel .light-control-panel .light-control-panel-list:hover {
+  cursor: pointer;
+}
+
+.app .app-monitor .control-panel .light-control-panel .light-control-panel-add {
+  border: none;
+  margin-left: 10px;
+  width: 60px;
+  height: 30px;
+  border-radius: 13px;
+  background-color: #3eff38;
+}
+
+.app .app-monitor .control-panel .light-control-panel .light-control-panel-add:hover {
+  background-color: #07d100;
+  outline: none;
+  cursor: pointer;
+}
+
+.app .app-monitor .control-panel .light-control-panel .light-control-panel-item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 20px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 10px;
+}
+
+.app .app-monitor .control-panel .light-control-panel .light-control-panel-item .light-control-panel-item-key {
+  margin-right: 5px;
+}
+
+.app .app-monitor .control-panel .light-control-panel .light-control-panel-item .light-control-panel-item-slider {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+.app .app-monitor .control-panel .light-control-panel .light-control-panel-item .light-control-panel-item-slider input {
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  -webkit-appearance: none;
+  width: 150px;
+  height: 10px;
+  border-radius: 5px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  -webkit-transition: opacity .2s;
+  transition: opacity .2s;
+}
+
+.app .app-monitor .control-panel .light-control-panel .light-control-panel-item .light-control-panel-item-slider input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #0059ff;
+  cursor: pointer;
+}
+
+.app .app-monitor .control-panel .light-control-panel .light-control-panel-item .light-control-panel-item-slider input::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #04AA6D;
+  cursor: pointer;
+}
+
+.app .app-monitor .control-panel .light-control-panel .light-control-panel-item .light-control-panel-item-value {
+  margin-left: 5px;
+  width: 40px;
+}
+
+.app .app-monitor .object-control-panel {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 25%;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.app .app-monitor .object-control-panel .object-control-panel-head {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 40px;
+}
+
+.app .app-monitor .object-control-panel .object-control-panel-head .object-control-panel-head-list {
+  margin-top: 10px;
+  outline: none;
+  padding: 1px;
+  border-radius: 13px;
+  height: 30px;
+  width: 170px;
+}
+
+.app .app-monitor .object-control-panel .object-control-panel-head .object-control-panel-head-list:hover {
+  cursor: pointer;
+}
+
+.app .app-monitor .object-control-panel .object-control-panel-head .object-control-panel-head-add {
+  border: none;
+  width: 60px;
+  height: 30px;
+  border-radius: 13px;
+  margin-left: 10px;
+  background-color: #3eff38;
+}
+
+.app .app-monitor .object-control-panel .object-control-panel-head .object-control-panel-head-add:hover {
+  background-color: #07d100;
+  outline: none;
+  cursor: pointer;
+}
+
+.app .app-monitor .object-control-panel .object-control-panel-main {
+  margin-bottom: 40px;
+}
+
+.app .app-monitor .object-control-panel .object-control-panel-main .object-control-panel-main-list {
+  margin-top: 10px;
+  outline: none;
+  padding: 1px;
+  border-radius: 13px;
+  height: 30px;
+  width: 170px;
+}
+
+.app .app-monitor .object-control-panel .object-control-panel-main .object-control-panel-main-list:hover {
+  cursor: pointer;
+}
+
+.app .app-monitor .object-control-panel .object-control-panel-main .object-control-panel-main-remove {
+  border: none;
+  margin-left: 10px;
+  width: 60px;
+  height: 30px;
+  border-radius: 13px;
+  background-color: #ff4747;
+}
+
+.app .app-monitor .object-control-panel .object-control-panel-main .object-control-panel-main-remove:hover {
+  background-color: #fd2828;
+  outline: none;
+  cursor: pointer;
+}
+
+.app .app-monitor .object-control-panel .object-control-panel-main .object-control-panel-main-items {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin-top: 50px;
+}
+
+.app .app-monitor .object-control-panel .object-control-panel-main .object-control-panel-main-items .object-control-panel-main-item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 20px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 10px;
+}
+
+.app .app-monitor .object-control-panel .object-control-panel-main .object-control-panel-main-items .object-control-panel-main-item .object-control-panel-main-item-key {
+  margin-right: 5px;
+}
+
+.app .app-monitor .object-control-panel .object-control-panel-main .object-control-panel-main-items .object-control-panel-main-item .object-control-panel-main-item-slider {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-left: auto;
+  margin-right: 15px;
+}
+
+.app .app-monitor .object-control-panel .object-control-panel-main .object-control-panel-main-items .object-control-panel-main-item .object-control-panel-main-item-slider input {
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  -webkit-appearance: none;
+  width: 150px;
+  height: 10px;
+  border-radius: 5px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  -webkit-transition: opacity .2s;
+  transition: opacity .2s;
+}
+
+.app .app-monitor .object-control-panel .object-control-panel-main .object-control-panel-main-items .object-control-panel-main-item .object-control-panel-main-item-slider input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #0059ff;
+  cursor: pointer;
+}
+
+.app .app-monitor .object-control-panel .object-control-panel-main .object-control-panel-main-items .object-control-panel-main-item .object-control-panel-main-item-slider input::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #04AA6D;
+  cursor: pointer;
+}
+
+.app .app-monitor .object-control-panel .object-control-panel-main .object-control-panel-main-items .object-control-panel-main-item .object-control-panel-main-item-value {
+  margin-left: 5px;
+  width: 40px;
+}
+
+.app .app-monitor .object-control-panel .object-control-panel-footer {
+  margin-top: 15px;
+}
+/*# sourceMappingURL=main.css.map */

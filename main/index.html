@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<link rel="stylesheet" href="main.css">
+	<title>WebGL Editor</title>
+
+	<script id="vertex-shader" type="x-shader/x-vertex">
+			attribute vec4 vPosition;
+			attribute vec4 vColor;
+			uniform vec3 theta;
+			uniform vec3 tm;
+			uniform vec3 sm;
+
+			uniform mat4 modelViewMatrix;
+			uniform mat4 projectionMatrix;
+
+			varying vec4 fColor;
+
+			void
+			main() {
+				vec3 angles = radians( theta );
+				vec3 c = cos( angles );
+				vec3 s = sin( angles );
+
+				mat4 rx = mat4( 1.0,  0.0,  0.0, 0.0,
+						0.0,  c.x,  s.x, 0.0,
+						0.0, -s.x,  c.x, 0.0,
+						0.0,  0.0,  0.0, 1.0 );
+
+				mat4 ry = mat4( c.y, 0.0, -s.y, 0.0,
+						0.0, 1.0,  0.0, 0.0,
+						s.y, 0.0,  c.y, 0.0,
+						0.0, 0.0,  0.0, 1.0 );
+
+
+				mat4 rz = mat4( c.z, s.z, 0.0, 0.0,
+						-s.z,  c.z, 0.0, 0.0,
+						0.0,  0.0, 1.0, 0.0,
+						0.0,  0.0, 0.0, 1.0 );
+
+				mat4 scale = mat4(
+					sm.x,   0.0,    0.0,    0.0,
+					0.0,    sm.y,   0.0,    0.0,
+					0.0,    0.0,    sm.z,   0.0,
+					0.0,    0.0,    0.0,    1.0 
+				);
+				
+				mat4 translation = mat4(
+					1.0,   0.0,   0.0,   0.0,
+					0.0,   1.0,   0.0,   0.0,
+					0.0,   0.0,   1.0,   0.0,
+					tm.x,  tm.y,  tm.z,  1.0 
+				);
+
+				fColor = vColor;
+				gl_Position = projectionMatrix * modelViewMatrix * translation * rz * ry * rx * scale * vPosition;
+			}
+	</script>
+
+	<script id="fragment-shader" type="x-shader/x-fragment">
+			precision mediump float;
+
+			varying vec4 fColor;
+			void
+			main() {
+			    gl_FragColor = fColor;
+			}
+	</script>
+	<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+	<script type="text/javascript" src="../Common/initShaders.js"></script>
+	<script type="text/javascript" src="../Common/MV.js"></script>
+	<script type="text/javascript" src="./utils/utilConstants.js"></script>
+	<script type="text/javascript" src="./utils/utilFunctions.js"></script>
+	<script type="text/javascript" src="./utils/Camera.js"></script>
+	<script type="text/javascript" src="./utils/Entity.js"></script>
+	<script type="text/javascript" src="./utils/Shader.js"></script>
+	<script type="text/javascript" src="./utils/Container.js"></script>
+	<script type="text/javascript" src="./utils/objects/Cone.js"></script>
+	<script type="text/javascript" src="./utils/objects/Cube.js"></script>
+	<script type="text/javascript" src="./utils/objects/Pyramid.js"></script>
+	<script type="text/javascript" src="index.js"></script>
+</head>
+
+<body>
+	<div class="app">
+		<div class="app-monitor">
+			<div class="control-panel">
+				<div class="camera-control-panel">
+					<label for="camera">Camera settings:</label>
+					<div class="camera-control-item">
+						<span class="camera-control-item-key">
+							Near
+						</span>
+						<div class="camera-control-item-slider">
+							<input id="nearSlider" type="range" min="0.1" max="3.1" value="0.1" step="0.2" />
+						</div>
+						<span class="camera-control-item-value" id="camera-slider-value1">
+							0.1
+						</span>
+					</div>
+					<div class="camera-control-item">
+						<span class="camera-control-item-key">
+							Far
+						</span>
+						<div class="camera-control-item-slider">
+							<input id="farSlider" type="range" min="3" max="10" value="3" step="1" />
+						</div>
+						<span class="camera-control-item-value" id="camera-slider-value2">
+							3
+						</span>
+					</div>
+					<div class="camera-control-item">
+						<span class="camera-control-item-key">
+							Radius
+						</span>
+						<div class="camera-control-item-slider">
+							<input id="radiusSlider" type="range" min="0.1" max="10" value="4" step="0.3" />
+						</div>
+						<span class="camera-control-item-value" id="camera-slider-value3">
+							4
+						</span>
+					</div>
+					<div class="camera-control-item">
+						<span class="camera-control-item-key">
+							Theta
+						</span>
+						<div class="camera-control-item-slider">
+							<input id="thetaSlider" type="range" min="-90" max="90" value="0" step="5" />
+						</div>
+						<span class="camera-control-item-value" id="camera-slider-value4">
+							0
+						</span>
+					</div>
+					<div class="camera-control-item">
+						<span class="camera-control-item-key">
+							Phi
+						</span>
+						<div class="camera-control-item-slider">
+							<input id="phiSlider" type="range" min="-90" max="90" value="0" step="5" />
+						</div>
+						<span class="camera-control-item-value" id="camera-slider-value5">
+							0
+						</span>
+					</div>
+					<div class="camera-control-item">
+						<span class="camera-control-item-key">
+							Fov
+						</span>
+						<div class="camera-control-item-slider">
+							<input id="fovSlider" type="range" min="10" max="120" value="30" step="4" />
+						</div>
+						<span class="camera-control-item-value" id="camera-slider-value6">
+							30
+						</span>
+					</div>
+					<div class="camera-control-item">
+						<span class="camera-control-item-key">
+							Aspect
+						</span>
+						<div class="camera-control-item-slider">
+							<input id="aspectSlider" type="range" min="0.5" max="2" value="1" step="0.1" />
+						</div>
+						<span class="camera-control-item-value" id="camera-slider-value7">
+							1
+						</span>
+					</div>
+				</div>
+				<div class="light-control-panel">
+					<label for="light">Light settings:</label>
+					<form onsubmit="submitHandler(event)">
+						<select class="light-control-panel-list">
+							<option selected="selected">Choose something</option>
+							<option value="light 1">Light Source 1</option>
+							<option value="light 2">Light Source 2</option>
+							<option value="light 3">Light Source 2</option>
+						</select>
+						<button type="button" class="light-control-panel-add">Add</button>
+					</form>
+					<div class="light-control-panel-item">
+						<span class="light-control-panel-item-key">
+							TranslateX
+						</span>
+						<div class="light-control-panel-item-slider">
+							<input id="lTranslateXSlider" type="range" min="-4" max="4" value="0" step="0.1"
+								onchange="lightChangeHandler(1, this.value)"
+								onmousemove="lightChangeHandler(1, this.value)" />
+						</div>
+						<span class="light-control-panel-item-value" id="light-slider-value1">
+							0
+						</span>
+					</div>
+					<div class="light-control-panel-item">
+						<span class="light-control-panel-item-key">
+							TranslateY
+						</span>
+						<div class="light-control-panel-item-slider">
+							<input id="lTranslateYSlider" type="range" min="-4" max="4" value="0" step="0.1"
+								onchange="lightChangeHandler(2, this.value)"
+								onmousemove="lightChangeHandler(2, this.value)" />
+						</div>
+						<span class="light-control-panel-item-value" id="light-slider-value2">
+							0
+						</span>
+					</div>
+					<div class="light-control-panel-item">
+						<span class="light-control-panel-item-key">
+							TranslateZ
+						</span>
+						<div class="light-control-panel-item-slider">
+							<input id="lTranslateZSlider" type="range" min="-4" max="4" value="0" step="0.1"
+								onchange="lightChangeHandler(3, this.value)"
+								onmousemove="lightChangeHandler(3, this.value)" />
+						</div>
+						<span class="light-control-panel-item-value" id="light-slider-value3">
+							0
+						</span>
+					</div>
+				</div>
+			</div>
+			<canvas id="gl-canvas" width="512px" height="512px">
+
+			</canvas>
+			<div class="object-control-panel">
+				<label for="create">Create an object:</label>
+				<div class="object-control-panel-head">
+					<div>
+						<select class="object-control-panel-head-list" id="add-object-list">
+							<option selected="selected">Choose something</option>
+							<option value="Cube">Cube</option>
+							<option value="Pyramid">Pyramid</option>
+							<option value="Cone">Cone</option>
+						</select>
+						<button class="object-control-panel-head-add" id="add-object">Add</button>
+					</div>
+				</div>
+				<label for="select">Select an object:</label>
+				<div class="object-control-panel-main">
+					<div>
+						<select class="object-control-panel-main-list" id="select-object">
+							<option selected="selected">Choose something</option>
+						</select>
+						<button class="object-control-panel-main-remove" id="remove-object">Remove</button>
+					</div>
+					<div class="object-control-panel-main-items">
+						<div class="object-control-panel-main-item">
+							<span class="object-control-panel-main-item-key">
+								TranslateX
+							</span>
+							<div class="object-control-panel-main-item-slider">
+								<input id="translateXSlider" type="range" min="-4" max="4" value="0" step="0.1" />
+							</div>
+							<span class="object-control-panel-main-item-value" id="object-slider-value1">
+								0
+							</span>
+						</div>
+						<div class="object-control-panel-main-item">
+							<span class="object-control-panel-main-item-key">
+								TranslateY
+							</span>
+							<div class="object-control-panel-main-item-slider">
+								<input id="translateYSlider" type="range" min="-4" max="4" value="0" step="0.1" />
+							</div>
+							<span class="object-control-panel-main-item-value" id="object-slider-value2">
+								0
+							</span>
+						</div>
+						<div class="object-control-panel-main-item">
+							<span class="object-control-panel-main-item-key">
+								TranslateZ
+							</span>
+							<div class="object-control-panel-main-item-slider">
+								<input id="translateZSlider" type="range" min="-4" max="4" value="0" step="0.1" />
+							</div>
+							<span class="object-control-panel-main-item-value" id="object-slider-value3">
+								0
+							</span>
+						</div>
+						<div class="object-control-panel-main-item">
+							<span class="object-control-panel-main-item-key">
+								Scale
+							</span>
+							<div class="object-control-panel-main-item-slider">
+								<input id="scaleSlider" type="range" min="0" max="4" value="1" step="0.1" />
+							</div>
+							<span class="object-control-panel-main-item-value" id="object-slider-value4">
+								1
+							</span>
+						</div>
+						<div class="object-control-panel-main-item">
+							<span class="object-control-panel-main-item-key">
+								RotateX
+							</span>
+							<div class="object-control-panel-main-item-slider">
+								<input id="rotateXSlider" type="range" min="-180" max="180" value="0" step="5" />
+							</div>
+							<span class="object-control-panel-main-item-value" id="object-slider-value5">
+								0
+							</span>
+						</div>
+						<div class="object-control-panel-main-item">
+							<span class="object-control-panel-main-item-key">
+								RotateY
+							</span>
+							<div class="object-control-panel-main-item-slider">
+								<input id="rotateYSlider" type="range" min="-180" max="180" value="0" step="5" />
+							</div>
+							<span class="object-control-panel-main-item-value" id="object-slider-value6">
+								0
+							</span>
+						</div>
+						<div class="object-control-panel-main-item">
+							<span class="object-control-panel-main-item-key">
+								RotateZ
+							</span>
+							<div class="object-control-panel-main-item-slider">
+								<input id="rotateZSlider" type="range" min="-180" max="180" value="0" step="5" />
+							</div>
+							<span class="object-control-panel-main-item-value" id="object-slider-value7">
+								0
+							</span>
+						</div>
+					</div>
+				</div>
+				<label for="load">Load an object:</label>
+				<div class="object-control-panel-footer">
+					<input type="file" name="load" id="object-control-panel-footer-load">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		function objectChangeHandler(id, value) {
+			document.getElementById(`object-slider-value${id}`).innerHTML = value;
+		}
+
+		function lightChangeHandler(id, value) {
+			document.getElementById(`light-slider-value${id}`).innerHTML = value;
+		}
+
+		function submitHandler(event) {
+			event.preventDefault();
+		}
+	</script>
+</body>
+
+</html>
