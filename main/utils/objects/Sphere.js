@@ -38,7 +38,7 @@ class Sphere extends Entity {
         }
     }
 
-    create(n = 6) {
+    create(n = 3) {
         let a = vec3(0.0, 0.0, -1.0);
         let b = vec3(0.0, 0.94, 0.33);
         let c = vec3(-0.81, -0.47, 0.33);

@@ -10,11 +10,17 @@
 			attribute vec4 vPosition;
 			attribute vec4 vColor;
 			attribute vec4 vNormal;
+
 			uniform vec3 theta;
 			uniform vec3 tm;
 			uniform vec3 sm;
 			uniform vec4 lights[10];
 			uniform int numOfLights;
+
+			uniform vec4 ambientProduct;
+			uniform vec4 diffuseProduct;
+			uniform vec4 specularProduct;
+			uniform float shininess;
 
 			uniform mat4 modelViewMatrix;
 			uniform mat4 projectionMatrix;
@@ -57,12 +63,8 @@
 					tm.x,  tm.y,  tm.z,  1.0 
 				);
 
-				vec4 diffuseProduct = vec4(1.0, 1.0, 1.0, 1.0);
-				vec4 specularProduct = vec4(1.0, 1.0, 1.0, 1.0);
-				vec4 ambientProduct = vec4(0.0, 0.0, 0.0, 1.0);
-				float shininess = 0.8;
-
 				vec3 vertexPos = vPosition.xyz;
+				vec4 tempColor = vec4(1.0, 1.0, 1.0, 1.0);
 				vec4 result;
 
 				for (int i = 0; i < 3; i++) {
@@ -75,10 +77,10 @@
 					float diffuseValue = max(dot(lightVector, normalVector), 0.0) / distance; 
 					float specularValue = pow(diffuseValue, shininess);
 
-					result += vColor * (diffuseProduct * diffuseValue + specularProduct * specularValue + ambientProduct);
+					result += (diffuseProduct * diffuseValue + specularProduct * specularValue);
 				}
 
-				fColor = result;
+				fColor = tempColor * result + ambientProduct;
 
 				gl_Position = projectionMatrix * modelViewMatrix * translation * rz * ry * rx * scale * vPosition;
 			}
@@ -208,9 +210,7 @@
 							TranslateX
 						</span>
 						<div class="light-control-panel-item-slider">
-							<input id="lTranslateXSlider" type="range" min="-4" max="4" value="0" step="0.1"
-								onchange="lightChangeHandler(1, this.value)"
-								onmousemove="lightChangeHandler(1, this.value)" />
+							<input id="lTranslateXSlider" type="range" min="-4" max="4" value="0" step="0.1" />
 						</div>
 						<span class="light-control-panel-item-value" id="light-slider-value1">
 							0
@@ -221,11 +221,9 @@
 							TranslateY
 						</span>
 						<div class="light-control-panel-item-slider">
-							<input id="lTranslateYSlider" type="range" min="-4" max="4" value="0" step="0.1"
-								onchange="lightChangeHandler(2, this.value)"
-								onmousemove="lightChangeHandler(2, this.value)" />
+							<input id="lTranslateYSlider" type="range" min="-4" max="4" value="0" step="0.1" />
 						</div>
-						<span class="light-control-panel-item-value" id="light-slider-value2">
+						<span class=" light-control-panel-item-value" id="light-slider-value2">
 							0
 						</span>
 					</div>
@@ -234,13 +232,27 @@
 							TranslateZ
 						</span>
 						<div class="light-control-panel-item-slider">
-							<input id="lTranslateZSlider" type="range" min="-4" max="4" value="0" step="0.1"
-								onchange="lightChangeHandler(3, this.value)"
-								onmousemove="lightChangeHandler(3, this.value)" />
+							<input id="lTranslateZSlider" type="range" min="-4" max="4" value="0" step="0.1" />
 						</div>
 						<span class="light-control-panel-item-value" id="light-slider-value3">
 							0
 						</span>
+					</div>
+					<div class="light-control-panel-item">
+						<span class="light-control-panel-item-key">
+							Shininess&nbsp;
+						</span>
+						<div class="light-control-panel-item-slider">
+							<input id="shininessSlider" type="range" min="0.2" max="2" value="1" step="0.1" />
+						</div>
+						<span class="light-control-panel-item-value" id="light-slider-value4">
+							1
+						</span>
+					</div>
+					<div class="light-control-panel-color">
+						<input type="color" class="light-control-panel-color-picker" id="ambientColor" value="#000000">
+						<input type="color" class="light-control-panel-color-picker" id="diffuseColor" value="#ffffff">
+						<input type="color" class="light-control-panel-color-picker" id="specularColor" value="#ffffff">
 					</div>
 				</div>
 			</div>
@@ -356,12 +368,6 @@
 			</div>
 		</div>
 	</div>
-
-	<script type="text/javascript">
-		function lightChangeHandler(id, value) {
-			document.getElementById(`light-slider-value${id}`).innerHTML = value;
-		}
-	</script>
 </body>
 
 </html>

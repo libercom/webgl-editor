@@ -200,6 +200,14 @@ label {
   width: 40px;
 }
 
+.app .app-monitor .control-panel .light-control-panel .light-control-panel-color {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
 .app .app-monitor .object-control-panel {
   display: -webkit-box;
   display: -ms-flexbox;

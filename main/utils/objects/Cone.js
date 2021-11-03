@@ -10,16 +10,30 @@ class Cone extends Entity {
 
     create() {
         for (let i = 0; i < 349; i += 12) {  // 1073
-            this.vertices.push(vec3(this.radius * Math.cos(i / 180 * Math.PI) + this.bot[0], this.bot[1], this.radius * Math.sin(i / 180 * Math.PI) + this.bot[2]));
-            this.vertices.push(vec3(this.radius * Math.cos((i + 12) / 180 * Math.PI) + this.bot[0], this.bot[1], this.radius * Math.sin((i + 12) / 180 * Math.PI) + this.bot[2]));
-            this.vertices.push(this.bot);
+            let a = vec3(this.radius * Math.cos(i / 180 * Math.PI) + this.bot[0], this.bot[1], this.radius * Math.sin(i / 180 * Math.PI) + this.bot[2]);
+            let b = vec3(this.radius * Math.cos((i + 12) / 180 * Math.PI) + this.bot[0], this.bot[1], this.radius * Math.sin((i + 12) / 180 * Math.PI) + this.bot[2]);
+            let c = this.bot;
+            let normal = this.calculateNormal(a, b, c);
+            this.normals.push(normal);
+            this.normals.push(normal);
+            this.normals.push(normal);
+            this.vertices.push(a);
+            this.vertices.push(b);
+            this.vertices.push(c);
             this.colors.push(...this.color[0]);
         }
 
         for (let i = 0; i < 349; i += 12) {
-            this.vertices.push(vec3(this.radius * Math.cos(i / 180 * Math.PI) + this.bot[0], this.bot[1], this.radius * Math.sin(i / 180 * Math.PI) + this.bot[2]));
-            this.vertices.push(vec3(this.radius * Math.cos((i + 12) / 180 * Math.PI) + this.bot[0], this.bot[1], this.radius * Math.sin((i + 12) / 180 * Math.PI) + this.bot[2]));
-            this.vertices.push(this.top);
+            let a = vec3(this.radius * Math.cos(i / 180 * Math.PI) + this.bot[0], this.bot[1], this.radius * Math.sin(i / 180 * Math.PI) + this.bot[2]);
+            let b = vec3(this.radius * Math.cos((i + 12) / 180 * Math.PI) + this.bot[0], this.bot[1], this.radius * Math.sin((i + 12) / 180 * Math.PI) + this.bot[2]);
+            let c = this.top;
+            let normal = this.calculateNormal(a, b, c);
+            this.normals.push(normal);
+            this.normals.push(normal);
+            this.normals.push(normal);
+            this.vertices.push(a);
+            this.vertices.push(b);
+            this.vertices.push(c);
             this.colors.push(...this.color[1]);
         }
     }

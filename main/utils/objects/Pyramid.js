@@ -1,6 +1,6 @@
 class Pyramid extends Entity {
     constructor(color) {
-        super([], []);
+        super([], [], []);
 
         this.color = color;
         [this.top, ...this.points] = WebGL_PYRAMID;
@@ -13,6 +13,16 @@ class Pyramid extends Entity {
         this.vertices.push(this.points[d]);
         this.vertices.push(this.points[b]);
         this.vertices.push(this.points[c]);
+
+        let normal = this.calculateNormal(this.points[d], this.points[b], this.points[c]);
+
+        this.normals.push(normal);
+        this.normals.push(normal);
+        this.normals.push(normal);
+
+        this.normals.push(normal);
+        this.normals.push(normal);
+        this.normals.push(normal);
     }
 
     create() {
@@ -22,17 +32,41 @@ class Pyramid extends Entity {
         this.vertices.push(this.points[1]);
         this.vertices.push(this.top);
 
+        let normal = this.calculateNormal(this.points[0], this.points[1], this.top);
+
+        this.normals.push(normal);
+        this.normals.push(normal);
+        this.normals.push(normal);
+
         this.vertices.push(this.points[0]);
         this.vertices.push(this.points[2]);
         this.vertices.push(this.top);
 
+        normal = this.calculateNormal(this.points[0], this.points[2], this.top);
+
+        this.normals.push(normal);
+        this.normals.push(normal);
+        this.normals.push(normal);
+
         this.vertices.push(this.points[2]);
         this.vertices.push(this.points[3]);
         this.vertices.push(this.top);
 
+        normal = this.calculateNormal(this.points[2], this.points[3], this.top);
+
+        this.normals.push(normal);
+        this.normals.push(normal);
+        this.normals.push(normal);
+
         this.vertices.push(this.points[1]);
         this.vertices.push(this.points[3]);
         this.vertices.push(this.top);
+
+        normal = this.calculateNormal(this.points[1], this.points[3], this.top);
+
+        this.normals.push(normal);
+        this.normals.push(normal);
+        this.normals.push(normal);
 
 
         this.colors = [

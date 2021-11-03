@@ -6,7 +6,7 @@ class Cube extends Entity {
         this.points = [...WebGL_CUBE];
     }
 
-    createSquareFromTriangles(a, b, c, d) {
+    createSquareFromTriangles(a, b, c, d, face) {
         this.vertices.push(this.points[a]);
         this.vertices.push(this.points[b]);
         this.vertices.push(this.points[c]);
@@ -14,24 +14,30 @@ class Cube extends Entity {
         this.vertices.push(this.points[b]);
         this.vertices.push(this.points[c]);
 
-        let normal = this.calculateNormal(this.points[a], this.points[b], this.points[c]);
+        let normal = null;
+
+        if (face === 0 || face === 1 || face === 4) {
+            normal = this.calculateNormal(this.points[a], this.points[b], this.points[c]);
+        } else {
+            normal = this.calculateNormal(this.points[d], this.points[b], this.points[c]);
+        }
+
         this.normals.push(normal);
         this.normals.push(normal);
         this.normals.push(normal);
 
-        normal = this.calculateNormal(this.points[d], this.points[b], this.points[c]);
         this.normals.push(normal);
         this.normals.push(normal);
         this.normals.push(normal);
     }
 
     create() {
-        this.createSquareFromTriangles(0, 1, 2, 3);
-        this.createSquareFromTriangles(1, 5, 3, 7);
-        this.createSquareFromTriangles(0, 1, 4, 5);
-        this.createSquareFromTriangles(4, 5, 6, 7);
-        this.createSquareFromTriangles(2, 3, 6, 7);
-        this.createSquareFromTriangles(0, 4, 2, 6);
+        this.createSquareFromTriangles(0, 1, 2, 3, 0); // front face
+        this.createSquareFromTriangles(1, 5, 3, 7, 1); // top face
+        this.createSquareFromTriangles(0, 1, 4, 5, 2); // left face
+        this.createSquareFromTriangles(4, 5, 6, 7, 3); // back face
+        this.createSquareFromTriangles(2, 3, 6, 7, 4); // right face
+        this.createSquareFromTriangles(0, 4, 2, 6, 5); // bottom face
         this.colors = [
             ...this.color[0],
             ...this.color[0],

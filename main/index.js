@@ -23,11 +23,11 @@ function init() {
     gl.clearColor(1.0, 1.0, 1.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
 
-    lights.addLightSource("Light Source 1");
+    lights.addLightSource("Light Source 1", vec4(4.0, 0.0, 0.0, 1.0));
     lights.addOption();
-    lights.addLightSource("Light Source 2");
+    lights.addLightSource("Light Source 2", vec4(-4.0, 0.0, 0.0, 1.0));
     lights.addOption();
-    lights.addLightSource("Light Source 3");
+    lights.addLightSource("Light Source 3", vec4(0.0, 0.0, -4.0, 1.0));
 
     Shader.init('vertex-shader', 'fragment-shader');
     Camera.init();
@@ -42,7 +42,7 @@ function render() {
 
     Camera.resolve();
 
-    objs.drawObjects(lights.container);
+    objs.drawObjects([lights.container, lights.ambientColor, lights.specularColor, lights.diffuseColor, lights.shininess]);
 
     requestAnimFrame(render);
 }
