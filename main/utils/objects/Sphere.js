@@ -1,6 +1,6 @@
 class Sphere extends Entity {
     constructor(color) {
-        super([], [], []);
+        super([], [], [], []);
 
         this.color = color;
     }
@@ -15,6 +15,8 @@ class Sphere extends Entity {
         this.normals.push(normal);
         this.normals.push(normal);
         this.normals.push(normal);
+
+        this.textureCoords.push(vec2(1.0, 1.0), vec2(1.0, 0.0), vec2(0.0, 1.0));
 
         this.colors.push(...this.color)
     }
