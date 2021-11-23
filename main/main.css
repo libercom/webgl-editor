@@ -208,6 +208,46 @@ label {
   margin-top: 10px;
 }
 
+.app .app-monitor .control-panel .texture-control-panel {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin-top: 40px;
+}
+
+.app .app-monitor .control-panel .texture-control-panel .texture-control-panel-list {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  outline: none;
+  padding: 1px;
+  border-radius: 13px;
+  height: 30px;
+  width: 170px;
+}
+
+.app .app-monitor .control-panel .texture-control-panel .texture-control-panel-list:hover {
+  cursor: pointer;
+}
+
+.app .app-monitor .control-panel .texture-control-panel .texture-control-panel-add {
+  border: none;
+  margin-left: 10px;
+  width: 60px;
+  height: 30px;
+  border-radius: 13px;
+  background-color: #3eff38;
+}
+
+.app .app-monitor .control-panel .texture-control-panel .texture-control-panel-add:hover {
+  background-color: #07d100;
+  outline: none;
+  cursor: pointer;
+}
+
 .app .app-monitor .object-control-panel {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -361,5 +401,11 @@ label {
 
 .app .app-monitor .object-control-panel .object-control-panel-footer {
   margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+.app .app-monitor .object-control-panel .texture-control-panel-footer {
+  margin-top: 15px;
+  margin-bottom: 20px;
 }
 /*# sourceMappingURL=main.css.map */

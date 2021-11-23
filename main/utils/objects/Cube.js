@@ -1,18 +1,22 @@
 class Cube extends Entity {
     constructor(color) {
-        super([], [], []);
+        super([], [], [], []);
 
         this.color = color;
         this.points = [...WebGL_CUBE];
     }
 
     createSquareFromTriangles(a, b, c, d, face) {
+        // vertex coordinates calculation
+
         this.vertices.push(this.points[a]);
         this.vertices.push(this.points[b]);
         this.vertices.push(this.points[c]);
         this.vertices.push(this.points[d]);
         this.vertices.push(this.points[b]);
         this.vertices.push(this.points[c]);
+
+        // normal of the faces calculation
 
         let normal = null;
 
@@ -29,6 +33,11 @@ class Cube extends Entity {
         this.normals.push(normal);
         this.normals.push(normal);
         this.normals.push(normal);
+
+        // texture coordinates calculation
+
+        this.textureCoords.push(vec2(1.0, 1.0), vec2(1.0, 0.0), vec2(0.0, 1.0));
+        this.textureCoords.push(vec2(0.0, 0.0), vec2(1.0, 0.0), vec2(0.0, 1.0));
     }
 
     create() {

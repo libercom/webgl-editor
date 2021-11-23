@@ -10,6 +10,7 @@ class ObjectsContainer {
         this.addOption();
         this.initButtons();
         this.optionChangeHandler();
+        this.initObjectLoader();
     }
 
     addObject(obj, name) {
@@ -21,7 +22,7 @@ class ObjectsContainer {
         this.container.forEach(element => element.init());
     }
 
-    drawObjects(lights) {
+    drawObjects(lights, texture) {
         this.container.forEach(element => element.draw(lights));
     }
 
@@ -165,6 +166,7 @@ class ObjectsContainer {
         const rotateXSlider = document.getElementById("rotateXSlider");
         const rotateYSlider = document.getElementById("rotateYSlider");
         const rotateZSlider = document.getElementById("rotateZSlider");
+        const texture = document.getElementById("select-texture");
 
         translateXSlider.addEventListener("change", this.translateXHandler);
         translateXSlider.addEventListener("mousemove", this.translateXHandler);
@@ -191,6 +193,7 @@ class ObjectsContainer {
             rotateXSlider.value = (this.id === -1) ? 0 : this.container[this.id].theta[0];
             rotateYSlider.value = (this.id === -1) ? 0 : this.container[this.id].theta[1];
             rotateZSlider.value = (this.id === -1) ? 0 : this.container[this.id].theta[2];
+            texture.selectedIndex = (this.id === -1) ? 0 : this.container[this.id].textureData;
 
             document.getElementById("object-slider-value1").innerHTML = (this.id === -1) ? 0 : this.container[this.id].translation[0];
             document.getElementById("object-slider-value2").innerHTML = (this.id === -1) ? 0 : this.container[this.id].translation[1];
@@ -199,6 +202,82 @@ class ObjectsContainer {
             document.getElementById("object-slider-value5").innerHTML = (this.id === -1) ? 0 : this.container[this.id].theta[0];
             document.getElementById("object-slider-value6").innerHTML = (this.id === -1) ? 0 : this.container[this.id].theta[1];
             document.getElementById("object-slider-value7").innerHTML = (this.id === -1) ? 0 : this.container[this.id].theta[2];
+        });
+    }
+
+    initObjectLoader() {
+        const objectLoad = document.getElementById("object-load");
+
+        objectLoad.addEventListener('change', () => {
+            let file = objectLoad.files[0];
+
+            let reader = new FileReader();
+
+            reader.onload = () => {
+                let lines = reader.result.split('\n');
+                let vertices = [];
+                let textureCoords = [];
+                let normals = [];
+                let lineVertices = [];
+                let lineTextureCoords = [];
+                let lineNormals = [];
+                let lineFaces = [];
+
+                for (let line of lines) {
+                    let res = line.replace("\r", "").split(" ");
+
+                    if (res[0] === 'v') {
+                        if (res[1] === '') {
+                            lineVertices.push(vec3(res[2], res[3], res[4]));
+                        } else {
+                            lineVertices.push(vec3(res[1], res[2], res[3]));
+                        }
+                    } else if (res[0] === 'vn') {
+                        lineNormals.push(vec4(res[1], res[2], res[3], 1.0));
+                    } else if (res[0] === 'vt') {
+                        lineTextureCoords.push(vec2(res[1], 1.0 - res[2]));
+                    } else if (res[0] === 'f') {
+                        lineFaces.push([res[1], res[2], res[3]]);
+                    }
+                }
+
+
+                for (let face of lineFaces) {
+                    for (let part of face) {
+                        const [vertex, textureCoord, normal] = part.split("/");
+
+                        vertices.push(lineVertices[vertex - 1]);
+                        lineNormals[normal - 1] && normals.push(lineNormals[normal - 1]);
+                        textureCoords.push(lineTextureCoords[textureCoord - 1]);
+                    }
+                }
+
+                const regex = new RegExp("Object \\d");
+                let name = "";
+
+                for (let i = this.names.length - 1; i >= 0; i--) {
+                    if (regex.test(this.names[i])) {
+                        name = "Object " + (this.names[i].slice(this.names[i].length - 2) - 0 + 1);
+                        break;
+                    }
+                }
+
+                if (name === "") {
+                    name = "Object 1";
+                }
+
+                objectLoad.value = "";
+
+                console.log(vertices)
+                console.log(normals)
+                console.log(textureCoords)
+
+                objs.addObject(new Entity(vertices, [], normals, textureCoords), name);
+                this.container[this.container.length - 1].init();
+                this.addOption();
+            };
+
+            reader.readAsText(file);
         });
     }
 

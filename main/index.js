@@ -6,8 +6,9 @@ window.onload = init;
 
 let objs = new ObjectsContainer();
 let lights = new LightContainer();
+let textures = new TextureContainer();
 
-objs.addObject(new Sphere(WebGL_RED), 'Sphere 1');
+objs.addObject(new Cube(shuffle(WebGL_MULTICOLOUR)), 'Cube 1');
 // objs.addObject(new Cube(shuffle(WebGL_MULTICOLOUR)), 'Cube 2');
 // objs.addObject(new Pyramid(shuffle(WebGL_MULTICOLOUR)), 'Pyramid');
 // objs.addObject(new Cone(pick2RandomColor(WebGL_MULTICOLOUR)), 'Cone');
@@ -33,6 +34,7 @@ function init() {
     Camera.init();
     lights.init();
     objs.init();
+    textures.init();
 
     render();
 };

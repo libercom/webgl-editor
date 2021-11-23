@@ -1,19 +1,25 @@
 class Entity {
-    constructor(vertices, colors, normals) {
+    constructor(vertices, colors, normals, textureCoords, textureData = 0) {
         this.vertices = vertices;
         this.colors = colors;
         this.normals = normals;
+        this.textureData = textureData;
+        this.textureCoords = textureCoords;
 
         this.vertexBuffer = null;
         this.colorBuffer = null;
         this.normalBuffer = null;
+        this.textureCoordBuffer = null;
 
         this.vertexAttributeLocation = null;
         this.colorAttributeLocation = null;
         this.normalAttributeLocation = null;
+        this.textureCoordAttributeLocation = null;
+
         this.thetaLoc = null;
         this.scaleLoc = null;
         this.translationLoc = null;
+        this.textureDataLoc = null;
 
         this.theta = vec3(0.0, 0.0, 0.0);
         this.scale = vec3(1.0, 1.0, 1.0);
@@ -46,28 +52,34 @@ class Entity {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, flatten(this.normals), gl.STATIC_DRAW);
 
+        this.textureCoordBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, flatten(this.textureCoords), gl.STATIC_DRAW);
+
         this.vertexAttributeLocation = Shader.getAttribLocation('vPosition');
         // this.colorAttributeLocation = Shader.getAttribLocation('vColor');
         this.normalAttributeLocation = Shader.getAttribLocation('vNormal');
+        this.textureCoordAttributeLocation = Shader.getAttribLocation('vTextureCoord');
     }
 
     select() {
         Shader.use();
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
-
         gl.vertexAttribPointer(this.vertexAttributeLocation, 3, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(this.vertexAttributeLocation);
 
         // gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
-
         // gl.vertexAttribPointer(this.colorAttributeLocation, 4, gl.FLOAT, false, 0, 0);
         // gl.enableVertexAttribArray(this.colorAttributeLocation);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
-
         gl.vertexAttribPointer(this.normalAttributeLocation, 4, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(this.normalAttributeLocation);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
+        gl.vertexAttribPointer(this.textureCoordAttributeLocation, 2, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(this.textureCoordAttributeLocation);
 
         this.thetaLoc = Shader.getUniformLocation("theta");
         this.scaleLoc = Shader.getUniformLocation("sm");
@@ -80,6 +92,7 @@ class Entity {
         this.diffuseColorLoc = Shader.getUniformLocation("diffuseProduct");
         this.specularColorLoc = Shader.getUniformLocation("specularProduct");
         this.shininessLoc = Shader.getUniformLocation("shininess");
+        this.textureDataLoc = Shader.getUniformLocation("textureData");
     }
 
     draw(lights) {
@@ -97,6 +110,7 @@ class Entity {
         gl.uniform1f(this.shininessLoc, this.shininess);
         gl.uniformMatrix4fv(this.modelViewMatrixLoc, false, flatten(Camera.modelViewMatrix));
         gl.uniformMatrix4fv(this.projectionMatrixLoc, false, flatten(Camera.projectionMatrix));
+        gl.uniform1i(this.textureDataLoc, this.textureData);
 
         gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length);
     }

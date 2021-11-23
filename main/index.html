@@ -10,22 +10,24 @@
 			attribute vec4 vPosition;
 			attribute vec4 vColor;
 			attribute vec4 vNormal;
-
+			attribute vec2 vTextureCoord;
+			
 			uniform vec3 theta;
 			uniform vec3 tm;
 			uniform vec3 sm;
 			uniform vec4 lights[10];
 			uniform int numOfLights;
-
+			
 			uniform vec4 ambientProduct;
 			uniform vec4 diffuseProduct;
 			uniform vec4 specularProduct;
 			uniform float shininess;
-
+			
 			uniform mat4 modelViewMatrix;
 			uniform mat4 projectionMatrix;
-
+			
 			varying vec4 fColor;
+			varying vec2 fTextureCoord;
 
 			void
 			main() {
@@ -67,7 +69,7 @@
 				vec4 tempColor = vec4(1.0, 1.0, 1.0, 1.0);
 				vec4 result;
 
-				for (int i = 0; i < 3; i++) {
+				for (int i = 0; i < 1; i++) {
 					vec3 lightPos = lights[i].xyz;
 					vec3 lightVector = normalize(lightPos - vertexPos);
 	
@@ -81,6 +83,7 @@
 				}
 
 				fColor = tempColor * result + ambientProduct;
+				fTextureCoord = vTextureCoord;
 
 				gl_Position = projectionMatrix * modelViewMatrix * translation * rz * ry * rx * scale * vPosition;
 			}
@@ -90,9 +93,14 @@
 			precision mediump float;
 
 			varying vec4 fColor;
+			varying vec2 fTextureCoord;
+			uniform sampler2D textureData;
+
 			void
 			main() {
-			    gl_FragColor = fColor;
+				vec4 colorFromTexture = texture2D(textureData, fTextureCoord);
+
+			    gl_FragColor = fColor * 0.2 + colorFromTexture;
 			}
 	</script>
 	<script type="text/javascript" src="../Common/webgl-utils.js"></script>
@@ -105,6 +113,7 @@
 	<script type="text/javascript" src="./utils/Shader.js"></script>
 	<script type="text/javascript" src="./utils/ObjectContainer.js"></script>
 	<script type="text/javascript" src="./utils/LightContainer.js"></script>
+	<script type="text/javascript" src="./utils/TextureContainer.js"></script>
 	<script type="text/javascript" src="./utils/objects/Cone.js"></script>
 	<script type="text/javascript" src="./utils/objects/Cube.js"></script>
 	<script type="text/javascript" src="./utils/objects/Pyramid.js"></script>
@@ -201,7 +210,6 @@
 					<div>
 						<select class="light-control-panel-list" id="select-light">
 							<option selected="selected">Choose something</option>
-
 						</select>
 						<button class="light-control-panel-add" id="add-light">Add</button>
 					</div>
@@ -255,8 +263,19 @@
 						<input type="color" class="light-control-panel-color-picker" id="specularColor" value="#ffffff">
 					</div>
 				</div>
+				<div class="texture-control-panel">
+					<label for="texture">Select a texture:</label>
+					<div>
+						<select class="texture-control-panel-list" id="select-texture">
+							<option selected="selected">Choose something</option>
+						</select>
+						<button type="button" class="texture-control-panel-add" id="apply-texture">Apply</button>
+					</div>
+				</div>
 			</div>
-			<canvas id="gl-canvas" width="512px" height="512px">
+			<div>
+				<canvas id="gl-canvas" width="512px" height="512px">
+			</div>
 
 			</canvas>
 			<div class="object-control-panel">
@@ -363,7 +382,12 @@
 				</div>
 				<label for="load">Load an object:</label>
 				<div class="object-control-panel-footer">
-					<input type="file" name="load" id="object-control-panel-footer-load">
+					<input type="file" name="load" id="object-load">
+				</div>
+
+				<label for="load">Load an texture:</label>
+				<div class="texture-control-panel-footer">
+					<input type="file" name="load" id="texture-load">
 				</div>
 			</div>
 		</div>
